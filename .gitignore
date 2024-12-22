@@ -12,6 +12,9 @@ result/
 # C extensions
 *.so
 
+# qt
+*.user
+
 # Distribution / packaging
 .Python
 build/

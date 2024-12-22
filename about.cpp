@@ -24,19 +24,9 @@ About::About(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::About)
 {
-    setObjectName("about");
-
-    setWindowTitle(Tools::aboutQssEditorTitle());
-
     ui->setupUi(this);
-
-    ui->label->setPixmap(QIcon(":/images/qsseditor.ico").pixmap(48, 48));
-    ui->labelVersion->setText(QString("QSS Editor %1").arg(NVER_STRING));
-
-    ui->labelCopyright->setText(QString("(C) 2014 %1 &lt;<a href=\"mailto:dmitrymq@gmail.com\">"
-                                        "dmitrymq@gmail.com</a>&gt;").arg(tr("Dmitry Baryshev")));
-
-    adjustSize();
+    ui->label_showAbout->setText("This is a qss editor");
+    ui->label_showLicense->setText("This project follows the licence GNU v3");
 }
 
 About::~About()

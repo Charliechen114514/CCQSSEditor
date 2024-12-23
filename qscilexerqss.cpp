@@ -16,7 +16,7 @@
  */
 
 #include <QEventLoop>
-#include <QRegExp>
+#include <QRegularExpression>
 
 #include "Qsci/qsciapis.h"
 
@@ -27,9 +27,12 @@ QsciLexerQSS::QsciLexerQSS(QObject *parent)
 {
     QsciAPIs *api = new QsciAPIs(this);
 
+    static const QRegularExpression expression("\\s+");
+
     const QString stringKeywords = QString(keywords(1)) + keywords(2);
 
-    QStringList listKeywords = stringKeywords.split(QRegExp("\\s+"), QString::SkipEmptyParts);
+    QStringList listKeywords = stringKeywords.split(
+        expression, Qt::SkipEmptyParts);
 
     // Qt classes
     listKeywords

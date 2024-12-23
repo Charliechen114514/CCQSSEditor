@@ -110,8 +110,6 @@ void Settings::fillTranslations()
 
     QTextStream in(&translations);
 
-    in.setCodec("UTF-8");
-
     while(!in.atEnd())
     {
         QString line = in.readLine().trimmed();

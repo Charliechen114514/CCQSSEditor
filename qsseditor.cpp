@@ -307,7 +307,7 @@ void QssEditor::showError(const QString &err)
 
 void QssEditor::restoreLastFiles()
 {
-    QStringList files = SETTINGS_GET_STRING_LIST(SETTING_LAST_FILES);
+    QStringList files = Settings::value<QStringList>(SETTING_LAST_FILES);
 
     files.removeDuplicates();
 
@@ -343,8 +343,8 @@ void QssEditor::saveLastFiles()
             files.removeLast();
     }
 
-    SETTINGS_SET_STRING_LIST(SETTING_LAST_FILES, files);
-    SETTINGS_SET_STRING(SETTING_LAST_FILE, m_lastFileName);
+    Settings::setValue(SETTING_LAST_FILES, files);
+    Settings::setValue(SETTING_LAST_FILE, m_lastFileName);
 }
 
 void QssEditor::appendCurrentProjectToHistory()
@@ -383,7 +383,7 @@ void QssEditor::resetWindowTitle()
 
 void QssEditor::resetPreviewDelay()
 {
-    int delay = SETTINGS_GET_INT(SETTING_PREVIEW_DELAY);
+    int delay = Settings::value<int>(SETTING_PREVIEW_DELAY);
 
     if(delay < 100 || delay > 5000)
         delay = 750;
@@ -495,9 +495,9 @@ void QssEditor::slotDelayedOpen()
 {
     if(QCoreApplication::arguments().size() > 1)
         open(QCoreApplication::arguments().at(1));
-    else if(SETTINGS_GET_BOOL(SETTING_OPEN_LAST_FILE))
+    else if(Settings::value<bool>(SETTING_OPEN_LAST_FILE))
     {
-        QString file = SETTINGS_GET_STRING(SETTING_LAST_FILE);
+        QString file = Settings::value<QString>(SETTING_LAST_FILE);
 
         if(!file.isEmpty())
             open(file);
@@ -533,7 +533,7 @@ void QssEditor::slotFindNext()
 
 void QssEditor::slotAbout()
 {
-    About a(this);
+    AboutDialog a(this);
     a.exec();
 }
 

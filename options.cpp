@@ -29,14 +29,14 @@ Options::Options(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    ui->checkOpenLast->setChecked(SETTINGS_GET_BOOL(SETTING_OPEN_LAST_FILE));
-    ui->spinPreviewDelay->setValue(SETTINGS_GET_INT(SETTING_PREVIEW_DELAY));
+    ui->checkOpenLast->setChecked(Settings::value<bool>(SETTING_OPEN_LAST_FILE));
+    ui->spinPreviewDelay->setValue(Settings::value<int>(SETTING_PREVIEW_DELAY));
 
     ui->comboLang->addItem('<' + tr("System") + '>');
 
     // translations
     const QMap<QString, QString> tsmap = Settings::instance()->translations();
-    QString ts = SETTINGS_GET_STRING(SETTING_TRANSLATION);
+    QString ts = Settings::value<QString>(SETTING_TRANSLATION);
     QMap<QString, QString>::const_iterator itEnd = tsmap.end();
 
     const QString basePath =
@@ -81,7 +81,7 @@ void Options::slotSomethingImportantChanged()
 
 void Options::saveSettings() const
 {
-    SETTINGS_SET_STRING(SETTING_TRANSLATION, ui->comboLang->itemData(ui->comboLang->currentIndex()).toString(), Settings::NoSync);
-    SETTINGS_SET_BOOL(SETTING_OPEN_LAST_FILE, ui->checkOpenLast->isChecked(), Settings::NoSync);
-    SETTINGS_SET_INT(SETTING_PREVIEW_DELAY, ui->spinPreviewDelay->value());
+    Settings::setValue<QString>(SETTING_TRANSLATION, ui->comboLang->itemData(ui->comboLang->currentIndex()).toString(), Settings::NoSync);
+    Settings::setValue<bool>(SETTING_OPEN_LAST_FILE, ui->checkOpenLast->isChecked(), Settings::NoSync);
+    Settings::setValue<int>(SETTING_PREVIEW_DELAY, ui->spinPreviewDelay->value());
 }

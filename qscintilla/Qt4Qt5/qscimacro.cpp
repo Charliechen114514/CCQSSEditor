@@ -192,7 +192,7 @@ QString QsciMacro::save() const
         unsigned len = (*it).text.size();
         QString m;
 
-        ms += m.sprintf("%u %lu %u", (*it).msg, (*it).wParam, len);
+        ms += m.asprintf("%u %lu %u", (*it).msg, (*it).wParam, len);
 
         if (len)
         {
@@ -219,10 +219,10 @@ QString QsciMacro::save() const
                 {
                     QString buf;
 
-                    ms += buf.sprintf("\\%02x", ch);
+                    ms += buf.asprintf("\\%02x", ch);
                 }
                 else
-                    ms += ch;
+                    ms += QChar(ch);
             }
         }
     }

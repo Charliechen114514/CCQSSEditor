@@ -31,18 +31,18 @@ SearchAndReplace::SearchAndReplace(QsciScintilla *editor, QWidget *parent) :
 
     QString selectedText = m_editor->selectedText();
 
-    ui->lineFind->setText(selectedText.isEmpty() ? SETTINGS_GET_STRING(SETTING_FIND_REPLACE_FIND_TEXT) : selectedText);
-    ui->checkReplace->setChecked(SETTINGS_GET_BOOL(SETTING_FIND_REPLACE_REPLACE, false));
-    ui->lineReplace->setText(SETTINGS_GET_STRING(SETTING_FIND_REPLACE_REPLAC_TEXT));
+    ui->lineFind->setText(selectedText.isEmpty() ? Settings::value<QString>(SETTING_FIND_REPLACE_FIND_TEXT) : selectedText);
+    ui->checkReplace->setChecked(Settings::value<bool>(SETTING_FIND_REPLACE_REPLACE, false));
+    ui->lineReplace->setText(Settings::value<QString>(SETTING_FIND_REPLACE_REPLAC_TEXT));
 
-    if(SETTINGS_GET_BOOL(SETTING_FIND_REPLACE_FORWARD, true))
+    if(Settings::value<bool>(SETTING_FIND_REPLACE_FORWARD, true))
         ui->radioDown->setChecked(true);
     else
         ui->radioUp->setChecked(true);
 
-    ui->checkCs->setChecked(SETTINGS_GET_BOOL(SETTING_FIND_REPLACE_CASE_SENSITIVE, false));
-    ui->checkWhole->setChecked(SETTINGS_GET_BOOL(SETTING_FIND_REPLACE_WHOLE_WORDS, false));
-    ui->checkRegexp->setChecked(SETTINGS_GET_BOOL(SETTING_FIND_REPLACE_REGEXP, false));
+    ui->checkCs->setChecked(Settings::value<bool>(SETTING_FIND_REPLACE_CASE_SENSITIVE, false));
+    ui->checkWhole->setChecked(Settings::value<bool>(SETTING_FIND_REPLACE_WHOLE_WORDS, false));
+    ui->checkRegexp->setChecked(Settings::value<bool>(SETTING_FIND_REPLACE_REGEXP, false));
 
     ui->lineFind->selectAll();
 
@@ -93,14 +93,14 @@ void SearchAndReplace::slotReplaceAll()
 
 void SearchAndReplace::slotAccepted()
 {
-    SETTINGS_SET_STRING(SETTING_FIND_REPLACE_FIND_TEXT, ui->lineFind->text(), Settings::NoSync);
-    SETTINGS_SET_BOOL(SETTING_FIND_REPLACE_REPLACE, ui->checkReplace->isChecked(), Settings::NoSync);
-    SETTINGS_SET_STRING(SETTING_FIND_REPLACE_REPLAC_TEXT, ui->lineReplace->text(), Settings::NoSync);
-    SETTINGS_SET_BOOL(SETTING_FIND_REPLACE_FORWARD, ui->radioDown->isChecked(), Settings::NoSync);
+    Settings::setValue<QString>(SETTING_FIND_REPLACE_FIND_TEXT, ui->lineFind->text(), Settings::NoSync);
+    Settings::setValue<bool>(SETTING_FIND_REPLACE_REPLACE, ui->checkReplace->isChecked(), Settings::NoSync);
+    Settings::setValue<QString>(SETTING_FIND_REPLACE_REPLAC_TEXT, ui->lineReplace->text(), Settings::NoSync);
+    Settings::setValue<bool>(SETTING_FIND_REPLACE_FORWARD, ui->radioDown->isChecked(), Settings::NoSync);
 
-    SETTINGS_SET_BOOL(SETTING_FIND_REPLACE_CASE_SENSITIVE, ui->checkCs->isChecked(), Settings::NoSync);
-    SETTINGS_SET_BOOL(SETTING_FIND_REPLACE_WHOLE_WORDS, ui->checkWhole->isChecked(), Settings::NoSync);
-    SETTINGS_SET_BOOL(SETTING_FIND_REPLACE_REGEXP, ui->checkRegexp->isChecked());
+    Settings::setValue<bool>(SETTING_FIND_REPLACE_CASE_SENSITIVE, ui->checkCs->isChecked(), Settings::NoSync);
+    Settings::setValue<bool>(SETTING_FIND_REPLACE_WHOLE_WORDS, ui->checkWhole->isChecked(), Settings::NoSync);
+    Settings::setValue<bool>(SETTING_FIND_REPLACE_REGEXP, ui->checkRegexp->isChecked());
 }
 
 void SearchAndReplace::slotSearchChanged()

@@ -29,13 +29,13 @@ public:
 
     bool saveAs(const QString &filePath);
 
-    void setQss(const QString &qss);
+    inline void setQss(const QString &qss){m_qss = qss;}
 
-    QString qss() const;
+    inline QString qss() const{return m_qss;}
 
-    qint32 version() const;
+    inline qint32 version() const{return m_version;}
 
-    QString error() const;
+    inline QString error() const{return m_error;}
 
     QString dataStreamErrorToString(int status);
 
@@ -44,29 +44,5 @@ private:
     qint32 m_version;
     QString m_error;
 };
-
-inline
-void Project::setQss(const QString &qss)
-{
-    m_qss = qss;
-}
-
-inline
-QString Project::qss() const
-{
-    return m_qss;
-}
-
-inline
-qint32 Project::version() const
-{
-    return m_version;
-}
-
-inline
-QString Project::error() const
-{
-    return m_error;
-}
 
 #endif // PROJECT_H

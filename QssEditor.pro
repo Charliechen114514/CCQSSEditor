@@ -8,6 +8,8 @@ mac {
     greaterThan(QT_MAJOR_VERSION, 4): QT *= macextras
 }
 
+greaterThan(QT_MAJOR_VERSION, 5): CONFIG += core5compat
+
 NVER1=0
 NVER2=6
 NVER3=1

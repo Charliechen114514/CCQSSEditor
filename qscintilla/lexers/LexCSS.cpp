@@ -1,7 +1,7 @@
 // Scintilla source code edit control
 /** @file LexCSS.cxx
  ** Lexer for Cascading Style Sheets
- ** Written by Jakub Vrána
+ ** Written by Jakub Vrï¿½na
  ** Improved by Philippe Lhoste (CSS2)
  ** Improved by Ross McKay (SCSS mode; see http://sass-lang.com/ )
  **/

@@ -22,14 +22,11 @@
 // This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
 // WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 
-
-#include <stdio.h>
+#include <QPainter>
 #include <stdarg.h>
-#include <string.h>
-
-#include <qapplication.h>
-#include <qwidget.h>
-#include <qfont.h>
+#include <QApplication>
+#include <QWidget>
+#include <QFont>
 #include <qpixmap.h>
 #include <qimage.h>
 #include <qstring.h>
@@ -38,7 +35,6 @@
 #include <qcursor.h>
 #include <qlibrary.h>
 
-#include <qdesktopwidget.h>
 #include <qpolygon.h>
 #include <qtextlayout.h>
 
@@ -122,37 +118,28 @@ void Font::Create(const FontParameters &fp)
     f->setStyleStrategy(strategy);
 
     // If name of the font begins with a '-', assume, that it is an XLFD.
-    if (fp.faceName[0] == '-')
-    {
-        f->setRawName(fp.faceName);
-    }
+
+    f->setFamily(fp.faceName);
+    f->setPointSize(fp.size);
+
+    // See if the Qt weight has been passed via the back door.   Otherwise
+    // map Scintilla weights to Qt weights ensuring that the SC_WEIGHT_*
+    // values get mapped to the correct QFont::Weight values.
+    QFont::Weight qt_weight;
+    if (fp.weight <= 200)
+        qt_weight = QFont::Weight::Light;
+    else if (fp.weight <= QsciScintillaBase::SC_WEIGHT_NORMAL)
+        qt_weight = QFont::Weight::Normal;
+    else if (fp.weight <= 600)
+        qt_weight = QFont::Weight::DemiBold;
+    else if (fp.weight <= 850)
+        qt_weight = QFont::Weight::Bold;
     else
-    {
-        f->setFamily(fp.faceName);
-        f->setPointSize(fp.size);
+        qt_weight = QFont::Weight::Black;
 
-        // See if the Qt weight has been passed via the back door.   Otherwise
-        // map Scintilla weights to Qt weights ensuring that the SC_WEIGHT_*
-        // values get mapped to the correct QFont::Weight values.
-        int qt_weight;
+    f->setWeight(qt_weight);
 
-        if (fp.weight < 0)
-            qt_weight = -fp.weight;
-        else if (fp.weight <= 200)
-            qt_weight = QFont::Light;
-        else if (fp.weight <= QsciScintillaBase::SC_WEIGHT_NORMAL)
-            qt_weight = QFont::Normal;
-        else if (fp.weight <= 600)
-            qt_weight = QFont::DemiBold;
-        else if (fp.weight <= 850)
-            qt_weight = QFont::Bold;
-        else
-            qt_weight = QFont::Black;
-
-        f->setWeight(qt_weight);
-
-        f->setItalic(fp.italic);
-    }
+    f->setItalic(fp.italic);
 
     fid = f;
 }
@@ -410,8 +397,7 @@ void SurfaceImpl::RoundedRectangle(PRectangle rc, ColourDesired fore,
 
     painter->setPen(convertQColor(fore));
     painter->setBrush(convertQColor(back));
-    painter->drawRoundRect(
-            QRectF(rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top));
+    painter->drawRect(QRectF(rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top));
 }
 
 void SurfaceImpl::AlphaRectangle(PRectangle rc, int cornerSize,
@@ -434,7 +420,7 @@ void SurfaceImpl::AlphaRectangle(PRectangle rc, int cornerSize,
 
     const int radius = (cornerSize ? 25 : 0);
 
-    painter->drawRoundRect(
+    painter->drawRoundedRect(
             QRectF(rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top),
             radius, radius);
 }
@@ -616,13 +602,13 @@ void SurfaceImpl::MeasureWidths(Font &font_, const char *s, int len,
 
 XYPOSITION SurfaceImpl::WidthText(Font &font_, const char *s, int len)
 {
-    return metrics(font_).width(convertText(s, len));
+    return metrics(font_).horizontalAdvance(convertText(s, len));
 
 }
 
 XYPOSITION SurfaceImpl::WidthChar(Font &font_, char ch)
 {
-    return metrics(font_).width(ch);
+    return metrics(font_).horizontalAdvance(ch);
 }
 
 XYPOSITION SurfaceImpl::Ascent(Font &font_)
@@ -861,7 +847,7 @@ void Window::SetTitle(const char *s)
 PRectangle Window::GetMonitorRect(Point pt)
 {
     QPoint qpt = PWindow(wid)->mapToGlobal(QPoint(pt.x, pt.y));
-    QRect qr = QApplication::desktop()->availableGeometry(qpt);
+    QRect qr = QApplication::screens()[0]->availableGeometry();
     qpt = PWindow(wid)->mapFromGlobal(qr.topLeft());
 
     return PRectangle(qpt.x(), qpt.y(), qpt.x() + qr.width(), qpt.y() + qr.height());

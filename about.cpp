@@ -20,7 +20,7 @@
 
 #include "ui_about.h"
 
-About::About(QWidget *parent) :
+AboutDialog::AboutDialog(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::About)
 {
@@ -29,7 +29,7 @@ About::About(QWidget *parent) :
     ui->label_showLicense->setText("This project follows the licence GNU v3");
 }
 
-About::~About()
+AboutDialog::~AboutDialog()
 {
     delete ui;
 }

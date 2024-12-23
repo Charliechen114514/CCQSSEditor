@@ -124,7 +124,7 @@ QVariant QsciScintillaBase::inputMethodQuery(Qt::InputMethodQuery query) const
             return QWidget::inputMethodQuery(query);
 #endif
 
-        case Qt::ImMicroFocus:
+        case Qt::ImCursorRectangle:
         {
             int startPos = (preeditPos >= 0) ? preeditPos : pos;
             Point pt = sci->LocationFromPosition(startPos);

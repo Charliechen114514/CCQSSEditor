@@ -40,7 +40,7 @@ int main(int argc, char *argv[])
 
     // load translations
     QString locale = QLocale::system().name();
-    QString ts = SETTINGS_GET_STRING(SETTING_TRANSLATION);
+    QString ts = Settings::value<QString>(SETTING_TRANSLATION);
     QString translationsDir =
 #ifdef Q_OS_WIN32
             QCoreApplication::applicationDirPath() + QDir::separator() + "translations";

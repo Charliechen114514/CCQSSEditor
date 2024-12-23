@@ -17,7 +17,7 @@
 
 #include <QDataStream>
 #include <QByteArray>
-#include <QRegExp>
+#include <QRegularExpression>
 #include <QDebug>
 #include <QFile>
 
@@ -29,7 +29,7 @@ Project::Project()
 
 bool Project::setFilePath(const QString &filePath)
 {
-    static const QRegExp rx("/\\*\\s+QssEditor:\\s+([a-zA-Z0-9+\\/=]+)\\s+\\*/\\s+");
+    static const QRegularExpression rx("/\\*\\s+QssEditor:\\s+([a-zA-Z0-9+\\/=]+)\\s+\\*/\\s+");
 
     m_error.clear();
 
@@ -52,9 +52,11 @@ bool Project::setFilePath(const QString &filePath)
 
     file.close();
 
-    if(rx.indexIn(qss) == 0)
+    QRegularExpressionMatch rxMatch = rx.match(qss);
+
+    if(rxMatch.hasMatch())
     {
-        QByteArray ba = QByteArray::fromBase64(rx.cap(1).toLatin1());
+        QByteArray ba = QByteArray::fromBase64(rxMatch.captured(1).toLatin1());
         QDataStream ds(&ba, QIODevice::ReadOnly);
 
         ds.setVersion(QDataStream::Qt_4_0);
@@ -67,7 +69,7 @@ bool Project::setFilePath(const QString &filePath)
             return false;
         }
 
-        qss = qss.mid(rx.matchedLength());
+        qss = qss.mid(rxMatch.capturedEnd());
 
         qDebug("Loaded project version %d", version);
     }

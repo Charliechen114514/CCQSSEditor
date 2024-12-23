@@ -38,6 +38,8 @@
 
 #include <QLibraryInfo>
 
+#include <algorithm>
+
 #include "Qsci/qscilexer.h"
 
 
@@ -602,7 +604,7 @@ void QsciAPIs::autoCompletionSelected(const QString &selection)
         owords = path.mid(1, path.length() - 2);
     }
 
-    origin = qLowerBound(prep->raw_apis, owords);
+    origin = std::lower_bound(prep->raw_apis.begin(),prep->raw_apis.end(), owords);
     /*
      * There is a bug somewhere, either in qLowerBound() or QList (or in GCC as
      * it seems to be Linux specific and the Qt code is the same on all
@@ -833,7 +835,7 @@ bool QsciAPIs::loadPrepared(const QString &filename)
 
     pf.close();
 
-    if (cpdata.count() == 0)
+    if (cpdata.size() == 0)
         return false;
 
     QByteArray pdata = qUncompress(cpdata);
@@ -961,7 +963,7 @@ QString QsciAPIs::prepName(const QString &filename, bool mkpath) const
 // Return installed API files.
 QStringList QsciAPIs::installedAPIFiles() const
 {
-    QString qtdir = QLibraryInfo::location(QLibraryInfo::DataPath);
+    QString qtdir = QLibraryInfo::path(QLibraryInfo::DataPath);
 
     QDir apidir = QDir(QString("%1/qsci/api/%2").arg(qtdir).arg(lexer()->lexer()));
     QStringList filenames;

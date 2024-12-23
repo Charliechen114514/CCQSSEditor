@@ -26,6 +26,7 @@ SOURCES += main.cpp \
     about.cpp
 
 HEADERS += qsseditor.h \
+    keywords_qss.h \
     qscilexerqss.h \
     project.h \
     settings.h \
@@ -40,8 +41,6 @@ FORMS += qsseditor.ui \
     about.ui
 
 RESOURCES += qsseditor.qrc
-
-RC_FILE = qsseditor.rc
 
 unix:!mac {
     CONFIG += qscintilla2

@@ -13,7 +13,7 @@ result/
 *.so
 
 # qt
-*.user
+QssEditor.pro.user
 
 # Distribution / packaging
 .Python

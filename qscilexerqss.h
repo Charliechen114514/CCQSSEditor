@@ -25,7 +25,13 @@ class QsciLexerQSS : public QsciLexerCSS
 public:
     QsciLexerQSS(QObject *parent = 0);
 
-    virtual const char *keywords(int set) const;
+    enum KeyWordSet{
+        Set1,
+        Set2
+    };
+
+
+    virtual const char *keywords(KeyWordSet set) const;
     virtual QFont defaultFont(int style) const;
 };
 

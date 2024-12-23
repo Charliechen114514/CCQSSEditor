@@ -22,6 +22,18 @@
 #include "options.h"
 #include "ui_options.h"
 
+static inline QString base_path_gen(){
+    return
+    #ifdef Q_OS_UNIX
+        QString("/usr/share/" TARGET_STRING).toLower()
+    #else
+        QCoreApplication::applicationDirPath()
+    #endif
+        + QDir::separator()
+        + "translations"
+        + QDir::separator();
+}
+
 Options::Options(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::Options),
@@ -39,15 +51,7 @@ Options::Options(QWidget *parent) :
     QString ts = Settings::value<QString>(SETTING_TRANSLATION);
     QMap<QString, QString>::const_iterator itEnd = tsmap.end();
 
-    const QString basePath =
-            #ifdef Q_OS_UNIX
-                QString("/usr/share/" TARGET_STRING).toLower()
-            #else
-                QCoreApplication::applicationDirPath()
-            #endif
-                + QDir::separator()
-                + "translations"
-                + QDir::separator();
+    const QString basePath = base_path_gen();
 
     for(QMap<QString, QString>::const_iterator it = tsmap.begin();it != itEnd;++it)
     {
